@@ -204,13 +204,13 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JTable listaProdutos;
     // End of variables declaration//GEN-END:variables
 
-    private void listarProdutos() {
+    public void listarProdutos() {
     try {
         ProdutosDAO produtosdao = new ProdutosDAO();
         DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
-        model.setNumRows(0);
+        model.setRowCount(0); // 🔹 Limpa a tabela antes de adicionar novos dados
 
-        ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
+        ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos(); // 🔹 Busca os produtos no banco
 
         for (ProdutosDTO produto : listagem) {
             model.addRow(new Object[]{
@@ -220,9 +220,12 @@ public class listagemVIEW extends javax.swing.JFrame {
                 produto.getStatus()
             });
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Erro ao carregar lista de produtos.");
-    }
-}
 
+        if (listagem.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Nenhum produto encontrado na lista.");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao carregar lista de produtos: " + e.getMessage());
+    }
+    }
 }

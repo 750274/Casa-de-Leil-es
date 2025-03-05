@@ -143,7 +143,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-         ProdutosDTO produto = new ProdutosDTO();
+     ProdutosDTO produto = new ProdutosDTO();
     String nome = cadastroNome.getText();
     String valor = cadastroValor.getText();
     String status = "A Venda";
@@ -155,6 +155,17 @@ public class cadastroVIEW extends javax.swing.JFrame {
 
         ProdutosDAO produtodao = new ProdutosDAO();
         produtodao.cadastrarProduto(produto);
+
+        JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+
+        // ✅ Limpa os campos após o cadastro
+        cadastroNome.setText("");
+        cadastroValor.setText("");
+
+        // ✅ Atualiza a listagem de produtos automaticamente
+        listagemVIEW listagem = new listagemVIEW();
+        listagem.setVisible(true);
+        listagem.listarProdutos(); // ✅ Chama o método para atualizar a tabela
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(null, "Erro: Valor inválido.");
     }

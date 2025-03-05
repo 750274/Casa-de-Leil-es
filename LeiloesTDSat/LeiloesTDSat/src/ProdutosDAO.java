@@ -53,7 +53,7 @@ public class ProdutosDAO {
 public ArrayList<ProdutosDTO> listarProdutosVendidos() {
     conn = new conectaDAO().connectDB();
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
-    String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+    String sql = "SELECT * FROM produtos WHERE status = 'Vendido'"; // Busca apenas produtos vendidos
 
     try {
         prep = conn.prepareStatement(sql);
@@ -80,6 +80,8 @@ public ArrayList<ProdutosDTO> listarProdutosVendidos() {
     return listagem;
 }
 
+
+
 public void venderProduto(int idProduto) {
     conn = new conectaDAO().connectDB();
     String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
@@ -99,6 +101,37 @@ public void venderProduto(int idProduto) {
             e.printStackTrace();
         }
     }
+}
+public ArrayList<ProdutosDTO> listarProdutos() {
+    conn = new conectaDAO().connectDB();
+    ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+    String sql = "SELECT * FROM produtos"; // 🔹 Busca todos os produtos cadastrados no banco
+
+    try {
+        prep = conn.prepareStatement(sql);
+        resultset = prep.executeQuery();
+
+        while (resultset.next()) {
+            ProdutosDTO produto = new ProdutosDTO();
+            produto.setId(resultset.getInt("id"));
+            produto.setNome(resultset.getString("nome"));
+            produto.setValor(resultset.getInt("valor"));
+            produto.setStatus(resultset.getString("status"));
+
+            listagem.add(produto);
+        }
+    } catch (SQLException erro) {
+        JOptionPane.showMessageDialog(null, "Erro ao listar produtos: " + erro.getMessage());
+    } finally {
+        try {
+            if (conn != null) {
+                conn.close(); // 🔹 Fecha a conexão para evitar sobrecarga no banco
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    return listagem;
 }
 
     
